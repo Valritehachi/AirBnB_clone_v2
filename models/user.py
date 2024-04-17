@@ -1,27 +1,24 @@
 #!/usr/bin/python3
 """This module defines a class User"""
 from models.base_model import BaseModel
-
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
+from os import getenv
 import models
 from models.base_model import Base
-from sqlalchemy import Column
-from models.base_model import BaseModel
-from sqlalchemy import String
-from os import getenv
-import sqlalchemy
-from sqlalchemy.orm import relationship
-
 
 class User(BaseModel, Base):
-    """the class Representation of a user """
+    """Class representing a User"""
+    __tablename__ = 'users'
+
     if models.storage_t == 'db':
-        __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
         places = relationship("Place", backref="user")
         reviews = relationship("Review", backref="user")
+
     else:
         email = ""
         password = ""
@@ -29,5 +26,5 @@ class User(BaseModel, Base):
         last_name = ""
 
     def __init__(self, *args, **kwargs):
-        """user initialization function"""
+        """Initialize User instance"""
         super().__init__(*args, **kwargs)
